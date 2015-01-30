@@ -4,54 +4,72 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import java.util.Random;
 
 import static android.widget.Toast.LENGTH_LONG;
 
 
 public class MainActivity extends ActionBarActivity {
     Button boton;
-    final int[] colores = new int[4];
+    RelativeLayout miLayout;
     TypedArray misColores;
     int i;
     Context miContexto;
+    Toast toast;
+    Boolean paletaCompleta;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         miContexto = this;
         setContentView(R.layout.activity_main);
-        Toast toast = Toast.makeText(this,R.string.toast, LENGTH_LONG);
+        toast = Toast.makeText(this,R.string.toast, LENGTH_LONG);
         toast.show();
-        cargarColores(colores);
+        paletaCompleta=false;
+        cargarColores();
         boton = (Button)findViewById(R.id.button);
-         i=0;
+        miLayout = (RelativeLayout)findViewById(R.id.miLayout);
+        i=0;
+
 
        boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Random rand = new Random();
+                i = rand.nextInt(misColores.length());
+
                 boton.setBackgroundColor(misColores.getColor(i,-1));
                 int idColor=misColores.getResourceId(i,-1);
                 String nombreColor=getResources().getResourceEntryName(idColor);
-                Toast.makeText(miContexto,nombreColor,Toast.LENGTH_SHORT).show();
-                if(i<misColores.length()-1){
-                    i++;
-                }else{
-                    i=0;
+
+                i = rand.nextInt(misColores.length());
+                miLayout.setBackgroundColor(misColores.getColor(i,-1));
+                idColor=misColores.getResourceId(i,-1);
+                nombreColor=nombreColor +" y "+getResources().getResourceEntryName(idColor);
+
+                if (toast!=null){
+                    toast.cancel();
                 }
+                toast = Toast.makeText(miContexto,nombreColor,Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
     }
-    private void cargarColores(int[] colores){
-        misColores = getResources().obtainTypedArray(R.array.colors);
-     }
-
-
-
+    private void cargarColores(){
+        if (paletaCompleta==true){
+        misColores = getResources().obtainTypedArray(R.array.colors);}
+        else{
+            misColores = getResources().obtainTypedArray(R.array.colors2);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,6 +87,8 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            paletaCompleta=!paletaCompleta;
+            cargarColores();
             return true;
         }
 
