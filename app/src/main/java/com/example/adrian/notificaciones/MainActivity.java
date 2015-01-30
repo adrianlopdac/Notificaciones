@@ -1,6 +1,7 @@
 package com.example.adrian.notificaciones;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import static android.widget.Toast.LENGTH_LONG;
 public class MainActivity extends ActionBarActivity {
     Button boton;
     final int[] colores = new int[4];
+    TypedArray misColores;
     int i;
     Context miContexto;
     @Override
@@ -26,33 +28,29 @@ public class MainActivity extends ActionBarActivity {
         toast.show();
         cargarColores(colores);
         boton = (Button)findViewById(R.id.button);
-        i=0;
+         i=0;
 
        boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boton.setBackgroundColor(getResources().getColor(colores[i]));
-                Toast.makeText(miContexto,getResources().getResourceEntryName(colores[i]),Toast.LENGTH_SHORT).show();
-                //mostrarToast(i);
-                i++;
-                if (i==4){
+
+                boton.setBackgroundColor(misColores.getColor(i,-1));
+                int idColor=misColores.getResourceId(i,-1);
+                String nombreColor=getResources().getResourceEntryName(idColor);
+                Toast.makeText(miContexto,nombreColor,Toast.LENGTH_SHORT).show();
+                if(i<misColores.length()-1){
+                    i++;
+                }else{
                     i=0;
-                };
+                }
             }
         });
     }
     private void cargarColores(int[] colores){
-       /*
-        colores[0]= getResources().getColor(R.color.rojo);
-        colores[1]= getResources().getColor(R.color.azul);
-        colores[2]= getResources().getColor(R.color.rosa);
-        colores[3]= getResources().getColor(R.color.verde);
-        */
-        colores[0]= getResources().getIdentifier("rojo","color",getPackageName());
-        colores[1]= getResources().getIdentifier("azul","color",getPackageName());
-        colores[2]= getResources().getIdentifier("rosa","color",getPackageName());
-        colores[3]= getResources().getIdentifier("verde","color",getPackageName());
-    }
+        misColores = getResources().obtainTypedArray(R.array.colors);
+     }
+
+
 
 
     @Override
@@ -77,16 +75,5 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void mostrarToast(int a){
-        switch (a){
-            case 0: Toast.makeText(this,R.string.rojo,Toast.LENGTH_SHORT).show();
-                break;
-            case 1: Toast.makeText(this,R.string.azul,Toast.LENGTH_SHORT).show();
-                break;
-            case 2: Toast.makeText(this,R.string.rosa,Toast.LENGTH_SHORT).show();
-                break;
-            case 3: Toast.makeText(this,R.string.verde,Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
+
 }

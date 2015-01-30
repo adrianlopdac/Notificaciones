@@ -4,4 +4,10 @@
     <color name="verde">#ff00ff7b</color>
     <color name="rosa">#ffff4ee3</color>
     <color name="azul">#ff0deeff</color>
+    <array name="colors">
+        <item>@color/rojo</item>
+        <item>@color/verde</item>
+        <item>@color/rosa</item>
+        <item>@color/azul</item>
+    </array>
 </resources>
